@@ -12,6 +12,7 @@ import { CellService } from 'src/cell/cell.service';
 import { MailerService } from 'src/mailer/mailer.service';
 import { MailService } from 'src/mail/mail.service';
 import { Mail } from 'src/mail/entities/mail.entity';
+import { RedisService } from 'src/redis/redis.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Sheet, RowEntity, Columns, Cell, Mail])],
@@ -23,6 +24,7 @@ import { Mail } from 'src/mail/entities/mail.entity';
     CellService,
     MailerService,
     MailService,
+    RedisService,
   ],
 })
 export class SheetModule {}

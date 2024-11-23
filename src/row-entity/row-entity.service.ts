@@ -3,12 +3,14 @@ import { RowEntity } from './entities/row-entity.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Sheet } from 'src/sheet/entities/sheet.entity';
+import { RedisService } from 'src/redis/redis.service';
 
 @Injectable()
 export class RowEntityService {
   constructor(
     @InjectRepository(RowEntity)
     private rowRepository: Repository<RowEntity>,
+    private redisService: RedisService,
   ) {}
 
   async create(payload: number, sheet: Sheet) {
@@ -47,6 +49,12 @@ export class RowEntityService {
   }
 
   async findOne(rowId: number) {
+    const cachedRow = await this.redisService.getCache(`row:${rowId}`);
+    if (cachedRow) {
+      const response = JSON.parse(cachedRow);
+      return response;
+    }
+
     const row = await this.rowRepository
       .createQueryBuilder('row')
       .leftJoinAndSelect('row.cells', 'cell')
@@ -65,11 +73,19 @@ export class RowEntityService {
       value: cell.value,
     }));
 
-    return {
+    const result = {
       rowValue: row.value,
       sheetName: sheet?.name,
       columns: columnValues,
     };
+
+    await this.redisService.setCache(
+      `row:${rowId}`,
+      JSON.stringify(result),
+      3600,
+    );
+
+    return result;
   }
 
   async findOneBySheet(row: number, sheetId: number) {

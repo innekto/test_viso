@@ -14,6 +14,7 @@ import { MailerService } from 'src/mailer/mailer.service';
 import { MailService } from 'src/mail/mail.service';
 import { Mail } from 'src/mail/entities/mail.entity';
 import { WebSocketGatewayService } from 'src/websocket/socket.gateway';
+import { RedisService } from 'src/redis/redis.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Sheet, RowEntity, Columns, Cell, Mail])],
@@ -28,6 +29,7 @@ import { WebSocketGatewayService } from 'src/websocket/socket.gateway';
     MailService,
     MailService,
     WebSocketGatewayService,
+    RedisService,
   ],
 })
 export class WebhookModule {}
