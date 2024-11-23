@@ -12,7 +12,7 @@ export class MailService {
     private mailRepository: Repository<Mail>,
   ) {}
 
-  async create(payload: CreateMailDto) {
+  async create(payload: CreateMailDto): Promise<void> {
     const exist = await this.mailRepository.findOneBy({
       email: payload.email,
     });

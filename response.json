@@ -1,0 +1,28 @@
+{
+  "getOneRow": {
+    "rowValue": 4,
+    "sheetName": "table1",
+    "columns": [
+      {
+        "columnName": "B",
+        "value": "ивив"
+      },
+      {
+        "columnName": "A",
+        "value": "ивив"
+      },
+      {
+        "columnName": "C",
+        "value": "ивив"
+      },
+      {
+        "columnName": "E",
+        "value": "ивив"
+      },
+      {
+        "columnName": "D",
+        "value": "ивив"
+      }
+    ]
+  }
+}

@@ -43,7 +43,7 @@ export class RowEntityService {
       };
     });
 
-    return result;
+    return result.sort((a, b) => a.rowValue - b.rowValue);
   }
 
   async findOne(rowId: number) {
