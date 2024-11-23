@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptionst } from './database/database-config';
 import { RowEntityModule } from './row-entity/row-entity.module';
-import { AnalyticsModule } from './analytics/analytics.module';
+
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { NotFoundInterceptor } from './interceptors';
 import { AppLoggerMiddleware } from './middlewares';
@@ -18,7 +18,7 @@ import { MailModule } from './mail/mail.module';
   imports: [
     TypeOrmModule.forRoot(dataSourceOptionst),
     RowEntityModule,
-    AnalyticsModule,
+
     WebhookModule,
     SheetModule,
     ColumnModule,
