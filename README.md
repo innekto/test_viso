@@ -3,4 +3,4 @@ WEB_HOOK_URL=https://test-viso.onrender.com/webhook
 
 USED TECH:
 
-NestJS, TS, WebSocket,Google AppScript, Nodemailer
+NestJS, TS, WebSocket,Google AppScript, Nodemailer, PostgreSQL
