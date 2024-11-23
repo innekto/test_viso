@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Sheet } from './entities/sheet.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { WebhookDataDto } from 'src/webhook/dto/webhook.dto';
 import { RowEntityService } from '../row-entity/row-entity.service';
 import { ColumnService } from 'src/column/column.service';
@@ -10,6 +10,8 @@ import { ColumnService } from 'src/column/column.service';
 import { CellService } from '../cell/cell.service';
 import { MailerService } from 'src/mailer/mailer.service';
 import { MailService } from 'src/mail/mail.service';
+import { AnalyticsService } from '../analytics/analytics.service';
+import { AnalyticsAction } from 'src/interface/analytics.interface';
 
 @Injectable()
 export class SheetService {
@@ -21,6 +23,8 @@ export class SheetService {
     private cellService: CellService,
     private mailerService: MailerService,
     private emailService: MailService,
+    private analyticsService: AnalyticsService,
+    private datasource: DataSource,
   ) {}
 
   async updateSheet(payload: WebhookDataDto) {
@@ -38,9 +42,22 @@ export class SheetService {
       const savedSheet = await this.sheetRepository.save(newSheet);
 
       const newRow = await this.rowService.create(row, savedSheet);
+
       const newColumn = await this.columnService.create(column, savedSheet);
 
-      await this.cellService.create(savedSheet, newRow, newColumn, newValue);
+      const savedCell = await this.cellService.create(
+        savedSheet,
+        newRow,
+        newColumn,
+        newValue,
+      );
+
+      await this.createAnalytic({
+        action: 'create',
+        targetId: savedCell.id,
+        oldValue: null,
+        newValue: savedCell.value,
+      });
     }
 
     if (existingSheet && existingSheet.name !== sheetName) {
@@ -72,9 +89,22 @@ export class SheetService {
         cellColumn,
         newValue,
       );
-    } else {
-      existingCell.value = newValue || null;
 
+      await this.createAnalytic({
+        action: 'create',
+        targetId: response.id,
+        oldValue: null,
+        newValue,
+      });
+    } else {
+      await this.createAnalytic({
+        action: 'update',
+        targetId: existingCell.id,
+        oldValue: existingCell.value,
+        newValue: newValue,
+      });
+
+      existingCell.value = newValue || null;
       response = await this.cellService.save(existingCell);
     }
     const rowCount = await this.rowService.count();
@@ -90,5 +120,15 @@ export class SheetService {
     }
 
     return response;
+  }
+
+  private async createAnalytic(payload: AnalyticsAction) {
+    const { action, targetId, oldValue, newValue } = payload;
+    await this.analyticsService.createAction({
+      action,
+      targetId,
+      oldValue,
+      newValue,
+    });
   }
 }

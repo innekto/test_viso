@@ -42,4 +42,8 @@ export class CellService {
   async save(cell: Cell) {
     return await this.cellRepository.save(cell);
   }
+
+  async findOneById(id: number) {
+    return await this.cellRepository.findOneByOrFail({ id });
+  }
 }

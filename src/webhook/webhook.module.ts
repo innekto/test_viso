@@ -15,9 +15,20 @@ import { MailService } from 'src/mail/mail.service';
 import { Mail } from 'src/mail/entities/mail.entity';
 import { WebSocketGatewayService } from 'src/websocket/socket.gateway';
 import { RedisService } from 'src/redis/redis.service';
+import { AnalyticsService } from 'src/analytics/analytics.service';
+import { Analytics } from 'src/analytics/entities/analytics.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Sheet, RowEntity, Columns, Cell, Mail])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Sheet,
+      RowEntity,
+      Columns,
+      Cell,
+      Mail,
+      Analytics,
+    ]),
+  ],
   controllers: [WebhookController],
   providers: [
     WebhookService,
@@ -30,6 +41,7 @@ import { RedisService } from 'src/redis/redis.service';
     MailService,
     WebSocketGatewayService,
     RedisService,
+    AnalyticsService,
   ],
 })
 export class WebhookModule {}

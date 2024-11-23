@@ -13,6 +13,7 @@ import { SheetModule } from './sheet/sheet.module';
 import { ColumnModule } from './column/column.module';
 import { CellModule } from './cell/cell.module';
 import { MailModule } from './mail/mail.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MailModule } from './mail/mail.module';
     ColumnModule,
     CellModule,
     MailModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [
