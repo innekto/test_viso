@@ -13,9 +13,20 @@ import { MailerService } from 'src/mailer/mailer.service';
 import { MailService } from 'src/mail/mail.service';
 import { Mail } from 'src/mail/entities/mail.entity';
 import { RedisService } from 'src/redis/redis.service';
+import { AnalyticsService } from 'src/analytics/analytics.service';
+import { Analytics } from 'src/analytics/entities/analytics.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Sheet, RowEntity, Columns, Cell, Mail])],
+  imports: [
+    TypeOrmModule.forFeature([
+      Sheet,
+      RowEntity,
+      Columns,
+      Cell,
+      Mail,
+      Analytics,
+    ]),
+  ],
   controllers: [SheetController],
   providers: [
     SheetService,
@@ -25,6 +36,7 @@ import { RedisService } from 'src/redis/redis.service';
     MailerService,
     MailService,
     RedisService,
+    AnalyticsService,
   ],
 })
 export class SheetModule {}
