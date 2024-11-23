@@ -88,7 +88,7 @@ export class SheetService {
         }),
       );
     }
-    console.log('response :>> ', response);
+
     return response;
   }
 }

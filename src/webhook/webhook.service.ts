@@ -12,7 +12,7 @@ export class WebhookService {
 
   async handleWebhook(payload: WebhookDataDto) {
     const response = await this.sheetService.updateSheet(payload);
-    console.log('response :>> ', response);
+
     this.webSocketGateway.emitRowUpdate(response);
     return response;
   }
