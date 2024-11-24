@@ -12,7 +12,7 @@ export class MailService {
     private mailRepository: Repository<Mail>,
   ) {}
 
-  async create(payload: CreateMailDto): Promise<void> {
+  async create(payload: CreateMailDto): Promise<Mail> {
     const exist = await this.mailRepository.findOneBy({
       email: payload.email,
     });
@@ -21,7 +21,7 @@ export class MailService {
       throw new BadRequestException('Email already exist');
     }
     const newEmail = new Mail(payload);
-    await this.mailRepository.save(newEmail);
+    return await this.mailRepository.save(newEmail);
   }
 
   async findAll() {
